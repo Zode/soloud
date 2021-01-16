@@ -72,8 +72,8 @@ namespace SoLoud
 		const int	gNumallpasses = 4;
 		const float	gMuted = 0;
 		const float	gFixedgain = 0.015f;
-		const float gScalewet = 3;
-		const float gScaledry = 2;
+		const float gScalewet = 1; // AniCator: This variable shouldn't be higher than 1 as it can cause audio distortion when stacking filters.
+		const float gScaledry = 1; // AniCator: This variable shouldn't be higher than 1 as it can cause audio distortion when stacking filters.
 		const float gScaledamp = 0.4f;
 		const float gScaleroom = 0.28f;
 		const float gOffsetroom = 0.7f;
