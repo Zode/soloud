@@ -5,6 +5,8 @@
 
 #include "soloud.h"
 
+#include <vector>
+
 namespace SoLoud
 {
 	struct Follower
@@ -24,16 +26,21 @@ namespace SoLoud
 	{
 	public:
 		LimiterInstance( class Limiter* aParent );
+		virtual void filter( float* aBuffer, unsigned int aSamples, unsigned int aBufferSize, unsigned int aChannels, float aSamplerate, time aTime );
 		virtual void filterChannel( float* aBuffer, unsigned int aSamples, float aSamplerate, time aTime, unsigned int aChannel, unsigned int aChannels );
 
 		Follower FollowerL;
 		Follower FollowerR;
+
+		std::vector<float*> PreviousBuffers;
+		float* ScratchBuffer = nullptr;
+		unsigned int BufferSize = 0;
 	};
 
 	class Limiter : public Filter
 	{
 	public:
-		Limiter() = default;
+		Limiter();
 		
 		virtual int getParamCount();
 		virtual const char* getParamName( unsigned int aParamIndex );
@@ -42,6 +49,16 @@ namespace SoLoud
 		virtual float getParamMin( unsigned int aParamIndex );
 
 		virtual FilterInstance* createInstance();
+
+		std::vector<float> FloatParameters;
+
+		enum ParameterType
+		{
+			PreGain = 0,
+			PostGain,
+			Release,
+			Threshold,
+		};
 	};
 }
 
