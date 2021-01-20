@@ -276,6 +276,8 @@ namespace SoLoud
 		AudioSource();
 		// Set default volume for instances
 		void setVolume(float aVolume);
+		float getVolume() const;
+		
 		// Set the looping of the instances created from this audio source
 		void setLooping(bool aLoop);
 		// Set whether only one instance of this sound should ever be playing at the same time

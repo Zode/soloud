@@ -215,6 +215,11 @@ namespace SoLoud
 		mVolume = aVolume;
 	}
 
+	float AudioSource::getVolume() const
+	{
+		return mVolume;
+	}
+
 	void AudioSource::setLoopPoint(time aLoopPoint)
 	{
 		mLoopPoint = aLoopPoint;
