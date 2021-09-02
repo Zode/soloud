@@ -150,14 +150,14 @@ namespace SoLoud
 		{
 			// Calculate the envelope.
 			FollowerL.Process( aBuffer, aSamples );
-			const float EnvL = FollowerL.Envelope;
+			const float EnvelopeL = FollowerL.Envelope;
 
-			if( EnvL > 1.0f )
+			if( EnvelopeL > 1.0f )
 			{
 				for( unsigned int Index = 0; Index < aSamples; Index++ )
 				{
 					// aBuffer[Index] /= EnvL;
-					PreviousBuffers[aChannel][Index] /= EnvL;
+					PreviousBuffers[aChannel][Index] /= EnvelopeL;
 				}
 			}
 		}
@@ -165,14 +165,14 @@ namespace SoLoud
 		{
 			// Calculate the envelope.
 			FollowerR.Process( aBuffer, aSamples );
-			const float EnvR = FollowerL.Envelope;
+			const float EnvelopeR = FollowerL.Envelope;
 
-			if( EnvR > 1.0f )
+			if( EnvelopeR > 1.0f )
 			{
 				for( unsigned int Index = 0; Index < aSamples; Index++ )
 				{
 					// aBuffer[Index] /= EnvR;
-					PreviousBuffers[aChannel][Index] /= EnvR;
+					PreviousBuffers[aChannel][Index] /= EnvelopeR;
 				}
 			}
 		}
