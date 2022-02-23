@@ -195,9 +195,13 @@ namespace SoLoud
 		// Seek to certain place in the stream. Base implementation is generic "tape" seek (and slow).
 		virtual result seek(time aSeconds, float *mScratch, unsigned int mScratchSize);
 		// Rewind stream. Base implementation returns NOT_IMPLEMENTED, meaning it can't rewind.
-		virtual result rewind();
+		virtual result rewind( unsigned int aSampleNumber = 0 );
 		// Get information. Returns 0 by default.
 		virtual float getInfo(unsigned int aInfoKey);
+
+		// Asynchronous synchronization code.
+		handle mSynchronizationSource;
+		bool mShouldSynchronize = false;
 	};
 
 	class Soloud;

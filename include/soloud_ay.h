@@ -44,7 +44,7 @@ namespace SoLoud
 		~AyInstance();
 		virtual unsigned int getAudio(float *aBuffer, unsigned int aSamplesToRead, unsigned int aBufferSize);
 		virtual bool hasEnded();
-		virtual result rewind();
+		virtual result rewind( unsigned int aSampleNumber );
 		virtual float getInfo(unsigned int aInfoKey);
 	};
 

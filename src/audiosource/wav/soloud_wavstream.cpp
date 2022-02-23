@@ -340,37 +340,37 @@ namespace SoLoud
 		return aSamplesToRead;
 	}
 
-	result WavStreamInstance::rewind()
+	result WavStreamInstance::rewind( unsigned int aSampleNumber )
 	{
 		switch (mParent->mFiletype)
 		{
 		case WAVSTREAM_OGG:
 			if (mCodec.mOgg)
 			{
-				stb_vorbis_seek_start(mCodec.mOgg);
+				stb_vorbis_seek_frame(mCodec.mOgg, aSampleNumber );
 			}
 			break;
 		case WAVSTREAM_FLAC:
 			if (mCodec.mFlac)
 			{
-				drflac_seek_to_pcm_frame(mCodec.mFlac, 0);
+				drflac_seek_to_pcm_frame(mCodec.mFlac, aSampleNumber );
 			}
 			break;
 		case WAVSTREAM_MP3:
 			if (mCodec.mMp3)
 			{
-				drmp3_seek_to_pcm_frame(mCodec.mMp3, 0);
+				drmp3_seek_to_pcm_frame(mCodec.mMp3, aSampleNumber );
 			}
 			break;
 		case WAVSTREAM_WAV:
 			if (mCodec.mWav)
 			{
-				drwav_seek_to_pcm_frame(mCodec.mWav, 0);
+				drwav_seek_to_pcm_frame(mCodec.mWav, aSampleNumber );
 			}
 			break;
 		}
-		mOffset = 0;
-		mStreamPosition = 0.0f;
+		mOffset = aSampleNumber;
+		mStreamPosition = mOffset / mSamplerate;
 		return 0;
 	}
 

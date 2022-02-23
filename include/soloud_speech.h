@@ -71,7 +71,7 @@ namespace SoLoud
 		SpeechInstance(Speech *aParent);
         virtual ~SpeechInstance();
 		virtual unsigned int getAudio(float *aBuffer, unsigned int aSamplesToRead, unsigned int aBufferSize);
-		virtual result rewind();
+		virtual result rewind( unsigned int aSampleNumber );
 		virtual bool hasEnded();
 	};
 };

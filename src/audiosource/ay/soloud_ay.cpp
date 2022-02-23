@@ -56,7 +56,7 @@ namespace SoLoud
 		return mParent->mLength <= mPos;
 	}
 
-	result AyInstance::rewind()
+	result AyInstance::rewind( unsigned int aSampleNumber )
 	{
 		mPos = 0;
 		return SO_NO_ERROR;

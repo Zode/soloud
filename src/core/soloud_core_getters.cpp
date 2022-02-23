@@ -113,13 +113,13 @@ namespace SoLoud
 		if ((aVoiceHandle & 0xfffff000) == 0xfffff000)
 			return 0;
 
-		lockAudioMutex_internal();
+		// lockAudioMutex_internal();
 		if (getVoiceFromHandle_internal(aVoiceHandle) != -1)
 		{
-			unlockAudioMutex_internal();
+			// unlockAudioMutex_internal();
 			return 1;
 		}
-		unlockAudioMutex_internal();
+		// unlockAudioMutex_internal();
 		return 0;
 	}
 
@@ -224,29 +224,29 @@ namespace SoLoud
 
 	time Soloud::getStreamTime(handle aVoiceHandle)
 	{
-		lockAudioMutex_internal();
+		// lockAudioMutex_internal();
 		int ch = getVoiceFromHandle_internal(aVoiceHandle);
 		if (ch == -1) 
 		{
-			unlockAudioMutex_internal();
+			// unlockAudioMutex_internal();
 			return 0;
 		}
 		double v = mVoice[ch]->mStreamTime;
-		unlockAudioMutex_internal();
+		// unlockAudioMutex_internal();
 		return v;
 	}
 
 	time Soloud::getStreamPosition(handle aVoiceHandle)
 	{
-		lockAudioMutex_internal();
+		// lockAudioMutex_internal();
 		int ch = getVoiceFromHandle_internal(aVoiceHandle);
 		if (ch == -1)
 		{
-			unlockAudioMutex_internal();
+			// unlockAudioMutex_internal();
 			return 0;
 		}
 		double v = mVoice[ch]->mStreamPosition;
-		unlockAudioMutex_internal();
+		// unlockAudioMutex_internal();
 		return v;
 	}
 

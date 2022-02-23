@@ -149,13 +149,23 @@ namespace SoLoud
 		}
 	}
 
-	result AudioSourceInstance::rewind()
+	result AudioSourceInstance::rewind( unsigned int aSampleNumber )
 	{
 		return NOT_IMPLEMENTED;
 	}
 
 	result AudioSourceInstance::seek(double aSeconds, float *mScratch, unsigned int mScratchSize)
 	{
+		// New implementation.
+		const int targetSample = floor( mSamplerate * aSeconds );
+		const auto rewindResult = rewind( targetSample );
+		if( rewindResult != SO_NO_ERROR )
+			return rewindResult;
+
+		mStreamPosition = aSeconds;
+		return SO_NO_ERROR;
+
+		// The old implementation is below.
 		double offset = aSeconds - mStreamPosition;
 		if (offset <= 0)
 		{
@@ -164,6 +174,7 @@ namespace SoLoud
 				// can't do generic seek backwards unless we can rewind.
 				return NOT_IMPLEMENTED;
 			}
+
 			offset = aSeconds;
 		}
 		int samples_to_discard = (int)floor(mSamplerate * offset);
