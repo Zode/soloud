@@ -82,8 +82,6 @@ namespace SoLoud
 		this->Release = std::expf( std::logf( 0.01f ) / this->Release );
 		
 		Initialized = true;
-
-		// Envelope = 0.0f;
 	}
 
 	void Follower::Process( float* Buffer, unsigned int Samples )
@@ -118,22 +116,6 @@ namespace SoLoud
 			setFilterParameter( Index, aParent->FloatParameters[Index] );
 		}
 	}
-
-	void LimiterInstance::filter( float* aBuffer, unsigned aSamples, unsigned aBufferSize, unsigned aChannels, float aSamplerate, time aTime )
-	{
-		BufferSize = aBufferSize;
-		
-		if( PreviousBuffers.size() != aChannels )
-		{
-			for( unsigned int Index = 0; Index < aChannels; Index++ )
-			{
-				PreviousBuffers.emplace_back( new float[static_cast<unsigned int>( 4096 )] );
-				std::memset( PreviousBuffers.back(), 0, sizeof( unsigned int ) * 4096 );
-			}
-		}
-
-		FilterInstance::filter( aBuffer, aSamples, aBufferSize, aChannels, aSamplerate, aTime );
-	}
 	
 	void LimiterInstance::filterChannel( float* aBuffer, unsigned int aSamples, float aSamplerate, time aTime, unsigned int aChannel, unsigned int aChannels )
 	{
@@ -156,8 +138,7 @@ namespace SoLoud
 			{
 				for( unsigned int Index = 0; Index < aSamples; Index++ )
 				{
-					// aBuffer[Index] /= EnvL;
-					PreviousBuffers[aChannel][Index] /= EnvelopeL;
+					aBuffer[Index] /= EnvelopeL;
 				}
 			}
 		}
@@ -171,21 +152,10 @@ namespace SoLoud
 			{
 				for( unsigned int Index = 0; Index < aSamples; Index++ )
 				{
-					// aBuffer[Index] /= EnvR;
-					PreviousBuffers[aChannel][Index] /= EnvelopeR;
+					aBuffer[Index] /= EnvelopeR;
 				}
 			}
 		}
-
-		if( !ScratchBuffer )
-		{
-			ScratchBuffer = new float[static_cast<unsigned int>( 4096 )];
-			std::memset( ScratchBuffer, 0, sizeof( unsigned int ) * 4096 );
-		}
-		
-		std::memcpy( ScratchBuffer, aBuffer, sizeof( float ) * aSamples );
-		std::memcpy( aBuffer, PreviousBuffers[aChannel], sizeof( float ) * aSamples );
-		std::memcpy( PreviousBuffers[aChannel], ScratchBuffer, sizeof( float ) * aSamples );
 
 		const float Threshold = mParam[Limiter::Threshold];
 		if( Threshold > 0.0f && Threshold < 1.0f )
@@ -208,10 +178,25 @@ namespace SoLoud
 			}
 		}
 
+		static float Sum = 0.0f;
+		static size_t Count = 0;
+		static float Average = 0.0f;
+		static bool Analyze = true;
+
 		// Post-gain
 		for( unsigned int Index = 0; Index < aSamples; Index++ )
 		{
-			PreviousBuffers[aChannel][Index] *= mParam[Limiter::PostGain];
+			aBuffer[Index] *= mParam[Limiter::PostGain];
+
+			Sum += aBuffer[Index];
+			if( Count < 1000 )
+			{
+				Count++;
+			}
+			else
+			{
+				Sum -= Average;
+			}
 		}
 	}
 }

@@ -26,15 +26,10 @@ namespace SoLoud
 	{
 	public:
 		LimiterInstance( class Limiter* aParent );
-		virtual void filter( float* aBuffer, unsigned int aSamples, unsigned int aBufferSize, unsigned int aChannels, float aSamplerate, time aTime );
-		virtual void filterChannel( float* aBuffer, unsigned int aSamples, float aSamplerate, time aTime, unsigned int aChannel, unsigned int aChannels );
+		void filterChannel( float* aBuffer, unsigned int aSamples, float aSamplerate, time aTime, unsigned int aChannel, unsigned int aChannels ) override;
 
 		Follower FollowerL;
 		Follower FollowerR;
-
-		std::vector<float*> PreviousBuffers;
-		float* ScratchBuffer = nullptr;
-		unsigned int BufferSize = 0;
 	};
 
 	class Limiter : public Filter
@@ -42,13 +37,13 @@ namespace SoLoud
 	public:
 		Limiter();
 		
-		virtual int getParamCount();
-		virtual const char* getParamName( unsigned int aParamIndex );
-		virtual unsigned int getParamType( unsigned int aParamIndex );
-		virtual float getParamMax( unsigned int aParamIndex );
-		virtual float getParamMin( unsigned int aParamIndex );
+		int getParamCount() override;
+		const char* getParamName( unsigned int aParamIndex ) override;
+		unsigned int getParamType( unsigned int aParamIndex ) override;
+		float getParamMax( unsigned int aParamIndex ) override;
+		float getParamMin( unsigned int aParamIndex ) override;
 
-		virtual FilterInstance* createInstance();
+		FilterInstance* createInstance() override;
 
 		std::vector<float> FloatParameters;
 
