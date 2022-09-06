@@ -1,1 +1,1 @@
-genie --soloud-devel --platform=x32 vs2017
+genie --with-miniaudio-only --platform=x64 vs2015
