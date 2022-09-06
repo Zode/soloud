@@ -159,7 +159,7 @@ namespace SoLoud
 
 		const auto sourceVoice = getVoiceFromHandle_internal( aSourceHandle );
 		const auto targetVoice = getVoiceFromHandle_internal( aTargetHandle );
-		if( sourceVoice != -1 && targetVoice != -1 )
+		if( sourceVoice != -1 && targetVoice != -1 && !mVoice[targetVoice]->mShouldSynchronize )
 		{
 			mVoice[targetVoice]->mSynchronizationSource = aSourceHandle;
 			mVoice[targetVoice]->mShouldSynchronize = true;
