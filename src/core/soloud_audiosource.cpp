@@ -102,6 +102,7 @@ namespace SoLoud
 		mDelaySamples = 0;
 		mOverallVolume = 0;
 		mOverallRelativePlaySpeed = 1;
+		mShouldSynchronize = false;
 	}
 
 	AudioSourceInstance::~AudioSourceInstance()

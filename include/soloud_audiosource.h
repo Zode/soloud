@@ -201,7 +201,7 @@ namespace SoLoud
 
 		// Asynchronous synchronization code.
 		handle mSynchronizationSource;
-		bool mShouldSynchronize = false;
+		bool mShouldSynchronize;
 	};
 
 	class Soloud;
