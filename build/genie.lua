@@ -1015,6 +1015,8 @@ end
     
 	defines { "GLEW_STATIC" }	
 
+	buildoptions { "-fexceptions" }
+
 if (WITH_ALSA == 1) then
 	links {"asound"}
 end
