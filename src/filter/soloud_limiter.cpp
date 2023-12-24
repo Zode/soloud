@@ -5,6 +5,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <cmath>
 
 namespace SoLoud
 {
@@ -78,8 +79,8 @@ namespace SoLoud
 		this->Attack = Attack * SampleRate;
 		this->Release = Release * SampleRate;
 
-		this->Attack = std::expf( std::logf( 0.01f ) / this->Attack );
-		this->Release = std::expf( std::logf( 0.01f ) / this->Release );
+		this->Attack = std::exp( std::log( 0.01f ) / this->Attack );
+		this->Release = std::exp( std::log( 0.01f ) / this->Release );
 		
 		Initialized = true;
 	}
@@ -105,7 +106,7 @@ namespace SoLoud
 			Envelope = Release * ( Envelope - PeakAmplitude ) + PeakAmplitude;
 		}
 		
-		Envelope = max( 0.000001f, Envelope );
+		Envelope = std::max( 0.000001f, Envelope );
 	}
 
 	LimiterInstance::LimiterInstance( Limiter* aParent )
