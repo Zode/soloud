@@ -149,6 +149,24 @@ namespace SoLoud
 		return res;
 	}
 
+	result Soloud::sync( handle aSourceHandle, handle aTargetHandle )
+	{
+		if( aSourceHandle == aTargetHandle )
+			return INVALID_PARAMETER;
+
+		if( voiceGroupHandleToArray_internal( aSourceHandle ) || voiceGroupHandleToArray_internal( aTargetHandle ) )
+			return NOT_IMPLEMENTED; // TODO: This function currently ignores voice groups.
+
+		const auto sourceVoice = getVoiceFromHandle_internal( aSourceHandle );
+		const auto targetVoice = getVoiceFromHandle_internal( aTargetHandle );
+		if( sourceVoice != -1 && targetVoice != -1 && !mVoice[targetVoice]->mShouldSynchronize )
+		{
+			mVoice[targetVoice]->mSynchronizationSource = aSourceHandle;
+			mVoice[targetVoice]->mShouldSynchronize = true;
+		}
+
+		return SO_NO_ERROR;
+	}
 
 	void Soloud::stop(handle aVoiceHandle)
 	{

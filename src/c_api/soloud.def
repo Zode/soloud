@@ -227,6 +227,13 @@ EXPORTS
 	LofiFilter_getParamMin
 	LofiFilter_create
 	LofiFilter_setParams
+	Limiter_destroy
+	Limiter_getParamCount
+	Limiter_getParamName
+	Limiter_getParamType
+	Limiter_getParamMax
+	Limiter_getParamMin
+	Limiter_create
 	Monotone_destroy
 	Monotone_create
 	Monotone_setParams

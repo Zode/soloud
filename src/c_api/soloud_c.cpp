@@ -44,6 +44,7 @@ freely, subject to the following restrictions:
 #include "../include/soloud_flangerfilter.h"
 #include "../include/soloud_freeverbfilter.h"
 #include "../include/soloud_lofifilter.h"
+#include "../include/soloud_limiter.h"
 #include "../include/soloud_monotone.h"
 #include "../include/soloud_noise.h"
 #include "../include/soloud_openmpt.h"
@@ -1407,6 +1408,46 @@ int LofiFilter_setParams(void * aClassPtr, float aSampleRate, float aBitdepth)
 {
 	LofiFilter * cl = (LofiFilter *)aClassPtr;
 	return cl->setParams(aSampleRate, aBitdepth);
+}
+
+void Limiter_destroy(void * aClassPtr)
+{
+  delete (Limiter*)aClassPtr;
+}
+
+int Limiter_getParamCount(void * aClassPtr)
+{
+	Limiter * cl = (Limiter *)aClassPtr;
+	return cl->getParamCount();
+}
+
+const char * Limiter_getParamName(void * aClassPtr, unsigned int aParamIndex)
+{
+	Limiter * cl = (Limiter *)aClassPtr;
+	return cl->getParamName(aParamIndex);
+}
+
+unsigned int Limiter_getParamType(void * aClassPtr, unsigned int aParamIndex)
+{
+	Limiter * cl = (Limiter *)aClassPtr;
+	return cl->getParamType(aParamIndex);
+}
+
+float Limiter_getParamMax(void * aClassPtr, unsigned int aParamIndex)
+{
+	Limiter * cl = (Limiter *)aClassPtr;
+	return cl->getParamMax(aParamIndex);
+}
+
+float Limiter_getParamMin(void * aClassPtr, unsigned int aParamIndex)
+{
+	Limiter * cl = (Limiter *)aClassPtr;
+	return cl->getParamMin(aParamIndex);
+}
+
+void * Limiter_create()
+{
+  return (void *)new Limiter;
 }
 
 void Monotone_destroy(void * aClassPtr)

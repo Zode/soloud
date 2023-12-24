@@ -87,7 +87,7 @@ namespace SoLoud
 		return samples_out;
 	}
 
-	result SpeechInstance::rewind()
+	result SpeechInstance::rewind( unsigned int aSampleNumber )
 	{
 		mSynth.init(mParent->mBaseFrequency, mParent->mBaseSpeed, mParent->mBaseDeclination, mParent->mBaseWaveform);
 		mSynth.initsynth(mParent->mElement.getSize(), (unsigned char *)mParent->mElement.getData());

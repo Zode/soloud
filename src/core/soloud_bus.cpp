@@ -96,6 +96,18 @@ namespace SoLoud
 				}
 			}
 		}
+
+		// Account for bus volume, mixed after the visualization stage.
+		// If visualization data needs to include the volume it can be multiplied with the mVolume/getVolume value.
+		for( unsigned int SampleIndex = 0; SampleIndex < aSamplesToRead; SampleIndex++ )
+		{
+			for( unsigned int ChannelIndex = 0; ChannelIndex < mChannels; ChannelIndex++ )
+			{
+				const unsigned int BufferIndex = SampleIndex + ChannelIndex * aBufferSize;
+				aBuffer[BufferIndex] = aBuffer[BufferIndex] * mParent->mVolume;
+			}
+		}
+		
 		return aSamplesToRead;
 	}
 

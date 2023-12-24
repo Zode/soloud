@@ -1783,6 +1783,11 @@ namespace SoLoud
 							}
 						}
 					}
+					else
+					{
+						// NOTE: Breaking here because this thing can get stuck in an infinite loop.
+						break;
+					}
 
 					// Keep track of how many samples we've written so far
 					outofs += writesamples;
@@ -2004,6 +2009,8 @@ namespace SoLoud
 
 		if (mustlive >= mMaxActiveVoices)
 		{
+			mapResampleBuffers_internal();
+
 			// Oopsie. Well, nothing to sort, since the "must live" voices already
 			// ate all our active voice slots.
 			// This is a potentially an error situation, but we have no way to report
@@ -2183,6 +2190,57 @@ namespace SoLoud
 			calcActiveVoices_internal();
 	
 		mixBus_internal(mOutputScratch.mData, aSamples, aStride, mScratch.mData, 0, (float)mSamplerate, mChannels, mResampler);
+
+		// HACK: Temporary location of synchronization code
+		for( unsigned int i = 0; i < mActiveVoiceCount; i++ )
+		{
+			auto* voice = mVoice[mActiveVoice[i]];
+			if( !voice )
+				continue;
+
+			if( voice->mShouldSynchronize )
+			{
+				const auto sourceVoice = getVoiceFromHandle_internal( voice->mSynchronizationSource );
+				if( sourceVoice < 0 )
+					continue;
+
+				voice->seek( mVoice[sourceVoice]->mStreamPosition, mScratch.mData, mScratchSize );
+				voice->mStreamTime = mVoice[sourceVoice]->mStreamTime;
+
+				// Offset the faders if they're active.
+				if( voice->mPanFader.mActive )
+				{
+					voice->mPanFader.mStartTime += voice->mStreamTime;
+					voice->mPanFader.mEndTime += voice->mStreamTime;
+				}
+
+				if( voice->mVolumeFader.mActive )
+				{
+					voice->mVolumeFader.mStartTime += voice->mStreamTime;
+					voice->mVolumeFader.mEndTime += voice->mStreamTime;
+				}
+
+				if( voice->mRelativePlaySpeedFader.mActive )
+				{
+					voice->mRelativePlaySpeedFader.mStartTime += voice->mStreamTime;
+					voice->mRelativePlaySpeedFader.mEndTime += voice->mStreamTime;
+				}
+
+				if( voice->mPauseScheduler.mActive )
+				{
+					voice->mPauseScheduler.mStartTime += voice->mStreamTime;
+					voice->mPauseScheduler.mEndTime += voice->mStreamTime;
+				}
+
+				if( voice->mStopScheduler.mActive )
+				{
+					voice->mStopScheduler.mStartTime += voice->mStreamTime;
+					voice->mStopScheduler.mEndTime += voice->mStreamTime;
+				}
+
+				voice->mShouldSynchronize = false;
+			}
+		}
 
 		for (i = 0; i < FILTERS_PER_STREAM; i++)
 		{

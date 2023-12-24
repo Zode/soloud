@@ -49,6 +49,7 @@ namespace SoLoud
 namespace SoLoud
 {
     ma_device gDevice;
+    ma_context gContext;
 
     void soloud_miniaudio_audiomixer(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount)
     {
@@ -59,19 +60,27 @@ namespace SoLoud
     static void soloud_miniaudio_deinit(SoLoud::Soloud *aSoloud)
     {
         ma_device_uninit(&gDevice);
+        ma_context_uninit(&gContext);
     }
 
     result miniaudio_init(SoLoud::Soloud *aSoloud, unsigned int aFlags, unsigned int aSamplerate, unsigned int aBuffer, unsigned int aChannels)
     {
         ma_device_config config = ma_device_config_init(ma_device_type_playback);
-        //config.periodSizeInFrames = aBuffer; // setting to aBuffer (like 2048) causes miniaudio to crash; let's just use the default.
+        config.bufferSizeInFrames = aBuffer;
         config.playback.format    = ma_format_f32;
         config.playback.channels  = aChannels;
         config.sampleRate         = aSamplerate;
         config.dataCallback       = soloud_miniaudio_audiomixer;
         config.pUserData          = (void *)aSoloud;
 
-        if (ma_device_init(NULL, &config, &gDevice) != MA_SUCCESS)
+        ma_context_config context_config = ma_context_config_init();
+        context_config.threadPriority = ma_thread_priority_realtime;
+    	if(ma_context_init(nullptr, 0, &context_config, &gContext) != MA_SUCCESS)
+    	{
+            return UNKNOWN_ERROR;
+    	}
+
+        if (ma_device_init(&gContext, &config, &gDevice) != MA_SUCCESS)
         {
             return UNKNOWN_ERROR;
         }

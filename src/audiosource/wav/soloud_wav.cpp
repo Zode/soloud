@@ -61,7 +61,7 @@ namespace SoLoud
 		return copylen;
 	}
 
-	result WavInstance::rewind()
+	result WavInstance::rewind( unsigned int aSampleNumber )
 	{
 		mOffset = 0;
 		mStreamPosition = 0.0f;

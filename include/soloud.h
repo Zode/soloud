@@ -270,6 +270,10 @@ namespace SoLoud
 
 		// Seek the audio stream to certain point in time. Some streams can't seek backwards. Relative play speed affects time.
 		result seek(handle aVoiceHandle, time aSeconds);
+
+		// Synchronize one stream with another. (the target handle will be synchronzied with the source)
+		result sync( handle aSourceHandle, handle aTargetHandle );
+
 		// Stop the sound.
 		void stop(handle aVoiceHandle);
 		// Stop all voices.
