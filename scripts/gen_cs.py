@@ -48,6 +48,11 @@ using System.Text;
 namespace SoLoud
 {
 
+public static class SoLoud
+{
+	public const string nativeLibName = "soloud_x64";
+}
+
 public class SoloudObject
 {
     public IntPtr objhandle;
@@ -95,7 +100,7 @@ fo.write("\n")
 #    class classname : SoloudObject
 #    {
 #    public const int CONSTANT = 3;
-#    [DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]
+#    [DllImport(SoLoud.nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 #    internal static extern int classname_foobar(...
 #    public int foobar(...
 #    {
@@ -137,11 +142,11 @@ for x in soloud_codegen.soloud_type:
                     if z[0:len(x)+1] == x.upper()+'_':
                         s = str(soloud_codegen.soloud_enum[z])
                         fo.write('\tpublic const int %s = %s;\n'%(z[len(x)+1::], s))
-                fo.write('\n\t[DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]\n\tinternal static extern IntPtr %s_create();\n'%(x))
+                fo.write('\n\t[DllImport(SoLoud.nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n\tinternal static extern IntPtr %s_create();\n'%(x))
                 fo.write('\tpublic %s()\n\t{\n'%(x))
                 fo.write('\t\tobjhandle = %s_create();\n'%(x))
                 fo.write('\t}\n')
-                fo.write('\n\t[DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]\n\tinternal static extern IntPtr %s_destroy(IntPtr aObjHandle);\n'%(x))
+                fo.write('\n\t[DllImport(SoLoud.nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n\tinternal static extern IntPtr %s_destroy(IntPtr aObjHandle);\n'%(x))
                 fo.write('\t~%s()\n\t{\n'%(x))
                 fo.write('\t\t%s_destroy(objhandle);\n'%(x))
                 fo.write('\t}\n')
@@ -174,7 +179,7 @@ for x in soloud_codegen.soloud_type:
                 if y[0] == 'float *':
                     floatptr = True
                     ret = 'IntPtr'
-                fo.write('\n\t[DllImport("soloud_x86.dll", CallingConvention = CallingConvention.Cdecl)]\n\tinternal static extern %s %s(IntPtr aObjHandle'%(ret, y[1]))
+                fo.write('\n\t[DllImport(SoLoud.nativeLibName, CallingConvention = CallingConvention.Cdecl)]\n\tinternal static extern %s %s(IntPtr aObjHandle'%(ret, y[1]))
                 for z in y[2]:
                     if len(z) > 1:
                         if z[1] == 'a'+x:
